@@ -39,7 +39,7 @@ func main() {
 	img := container.New(layout.NewGridWrapLayout(fyne.NewSize(width, height)), rast)
 
 	// боковое меню
-	menu := menu.MenuEx(a, img, engine)
+	menu := menu.MenuEx(w, a, img, engine)
 
 	menuColumn := container.New(layout.NewGridWrapLayout(fyne.NewSize(300, height)), menu)
 	form := container.New(layout.NewFormLayout(), menuColumn, img)

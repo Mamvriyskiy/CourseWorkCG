@@ -3,8 +3,6 @@ package camera
 import (
 	//"fmt"
 
-	//"fmt"
-
 	"../inter"
 	"../mathfunc"
 )

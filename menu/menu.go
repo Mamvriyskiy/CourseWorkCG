@@ -13,7 +13,10 @@ import (
 	"../polygon"
 	"../inter"
 	"../camera"
-	"../draw"
+	"../drawobj"
+	"../graphics"
+	"../mathfunc"
+	"image/color"
 )
 
 func MenuEx(a fyne.App, img *fyne.Container, engine *inter.MyGraphicsEngine) *fyne.Container {
@@ -35,7 +38,7 @@ func MenuEx(a fyne.App, img *fyne.Container, engine *inter.MyGraphicsEngine) *fy
 		if errA.message == "" && errB.message == "" {
 			engine.Object = polygon.CreateSceneEx(sizeSceneA, sizeSceneB)
 			engine.Camera.Matrix = camera.CreateCamera(engine.Camera, engine.ProjMatrix)
-			draw.DrawScene()
+			drawobj.DrawSceneEx(engine)
 			//camera.CreateCamera(&Scene, engine, points)
 		} else {
 			entryA.SetText("")
@@ -79,23 +82,33 @@ func MenuEx(a fyne.App, img *fyne.Container, engine *inter.MyGraphicsEngine) *fy
 	buttonZoomInCamera, buttonZoomOutCamera, buttonRotateLeftCamera, buttonRotateRightCamera *widget.Button
 	{
 		buttonUpCamera = widget.NewButtonWithIcon("", theme.MoveUpIcon(), func() {
-			// Действие, выполняемое при нажатии на кнопку
+			engine.Camera.VCamera.Add(mathfunc.MakeVec3(0, 1, 0))
+			renderScene(engine)
+			img.Refresh()
 		})
 
 		buttonDownCamera = widget.NewButtonWithIcon("", theme.MoveDownIcon(), func() {
-			// Действие, выполняемое при нажатии на кнопку
+			engine.Camera.VCamera.Add(mathfunc.MakeVec3(0, -1, 0))
+			renderScene(engine)
+			img.Refresh()
 		})
 
 		buttonLeftCamera = widget.NewButtonWithIcon("", theme.NavigateBackIcon(), func() {
-			// Действие, выполняемое при нажатии на кнопку
+			engine.Camera.VCamera.Add(mathfunc.MakeVec3(-1, 0, 0))
+			renderScene(engine)
+			img.Refresh()
 		})
 
 		buttonRightCamera = widget.NewButtonWithIcon("", theme.NavigateNextIcon(), func() {
-			// Действие, выполняемое при нажатии на кнопку
+			engine.Camera.VCamera.Add(mathfunc.MakeVec3(1, 0, 0))
+			renderScene(engine)
+			img.Refresh()
 		})
 
 		buttonZoomInCamera = widget.NewButton("W", func() {
-			// Действие, выполняемое при нажатии на кнопку
+			engine.Camera.VCamera.Add(engine.Camera.VForward)
+			renderScene(engine)
+			img.Refresh()
 		})
 
 		buttonZoomOutCamera = widget.NewButton("S", func() {
@@ -205,4 +218,14 @@ func createSeparatorLine(width float32) *canvas.Line {
     line.StrokeWidth = width
     line.Resize(fyne.NewSize(100, 1))
     return line
+}
+
+func renderScene(engine *inter.MyGraphicsEngine) {
+	engine.ZBuf = nil
+	engine.ZBuf = graphics.CreateZBuf(engine.Cnv.Width(), engine.Cnv.Height())
+
+	engine.Cnv.Fill(color.RGBA{3, 215, 252, 140})
+
+	engine.Camera.Matrix = camera.CreateCamera(engine.Camera, engine.ProjMatrix)
+	drawobj.DrawSceneEx(engine)
 }

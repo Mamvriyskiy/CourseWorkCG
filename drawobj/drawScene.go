@@ -3,8 +3,8 @@ package drawobj
 import (
 	"math"
 	//"image/color"
-	"../inter"
-	"../mathfunc"
+	"github.com/Mamvriyskiy/CourseWorkCG/inter"
+	"github.com/Mamvriyskiy/CourseWorkCG/mathfunc"
 )
 
 // func DrawLine3D(engine *inter.MyGraphicsEngine, p1, p2 inter.Vec4, c color.Color) {

@@ -1,8 +1,8 @@
 package camera
 
 import (
-	"../inter"
-	"../mathfunc"
+	"github.com/Mamvriyskiy/CourseWorkCG/inter"
+	"github.com/Mamvriyskiy/CourseWorkCG/mathfunc"
 )
 
 func InitLightCamera() inter.Camera {

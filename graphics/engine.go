@@ -7,7 +7,7 @@ import (
 	"image/color"
 	//"math"
 
-	"../inter"
+	"github.com/Mamvriyskiy/CourseWorkCG/inter"
 )
 
 func NewMyGraphicsEngine(cnv ImageCanvas, flag bool) *inter.MyGraphicsEngine {

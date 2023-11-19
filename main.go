@@ -12,10 +12,10 @@ import (
 
 	//"fyne.io/fyne/v2/widget"
 
-	"./camera"
-	"./graphics"
-	"./mathfunc"
-	"./menu"
+	"github.com/Mamvriyskiy/CourseWorkCG/camera"
+	"github.com/Mamvriyskiy/CourseWorkCG/graphics"
+	"github.com/Mamvriyskiy/CourseWorkCG/mathfunc"
+	"github.com/Mamvriyskiy/CourseWorkCG/menu"
 )
 
 const (
@@ -36,7 +36,14 @@ func main() {
 	engine.LightCamera = camera.InitLightCamera()
 
 	rast := canvas.NewRasterFromImage(cnv.Image())
+
+	
 	img := container.New(layout.NewGridWrapLayout(fyne.NewSize(width, height)), rast)
+
+	// img.SetOnMouseUp(func(event *fyne.PointEvent) {
+	// 	x, y := int(event.Position.X), int(event.Position.Y)
+	// 	fmt.Printf("Mouse Up at (%d, %d)\n", x, y)
+	// })
 
 	// боковое меню
 	menu := menu.MenuEx(w, a, img, engine)

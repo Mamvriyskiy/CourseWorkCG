@@ -12,10 +12,10 @@ import (
 
 	//"fyne.io/fyne/v2/widget"
 
-	"github.com/Mamvriyskiy/CourseWorkCG/camera"
-	"github.com/Mamvriyskiy/CourseWorkCG/graphics"
-	"github.com/Mamvriyskiy/CourseWorkCG/mathfunc"
-	"github.com/Mamvriyskiy/CourseWorkCG/menu"
+	"./camera"
+	"./graphics"
+	"./mathfunc"
+	"./menu"
 )
 
 const (
@@ -37,18 +37,17 @@ func main() {
 
 	rast := canvas.NewRasterFromImage(cnv.Image())
 
-	
 	img := container.New(layout.NewGridWrapLayout(fyne.NewSize(width, height)), rast)
 
-	// img.SetOnMouseUp(func(event *fyne.PointEvent) {
-	// 	x, y := int(event.Position.X), int(event.Position.Y)
-	// 	fmt.Printf("Mouse Up at (%d, %d)\n", x, y)
-	// })
+	rast.OnTapped = func(e *fyne.PointEvent) {
+		x, y := int(e.Position.X), int(e.Position.Y)
+		fmt.Printf("Mouse clicked at coordinates (%d, %d)\n", x, y)
+	}
 
 	// боковое меню
 	menu := menu.MenuEx(w, a, img, engine)
 
-	menuColumn := container.New(layout.NewGridWrapLayout(fyne.NewSize(300, height)), menu)
+	menuColumn := container.New(layout.NewGridWrapLayout(fyne.NewSize(310, height)), menu)
 	form := container.New(layout.NewFormLayout(), menuColumn, img)
 	w.SetContent(form)
 

@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"image/color"
 
-	"github.com/Mamvriyskiy/CourseWorkCG/inter"
+	"../inter"
 )
 
 func createSquareUpDown(x1, y1, z1, x2, y2, z2 float64, clr color.Color) inter.Square {

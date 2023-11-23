@@ -2,32 +2,10 @@ package drawobj
 
 import (
 	"math"
-	//"image/color"
-	"github.com/Mamvriyskiy/CourseWorkCG/inter"
-	"github.com/Mamvriyskiy/CourseWorkCG/mathfunc"
+	"image/color"
+	"../inter"
+	"../mathfunc"
 )
-
-// func DrawLine3D(engine *inter.MyGraphicsEngine, p1, p2 inter.Vec4, c color.Color) {
-// 	dx := p2.X - p1.X
-// 	dy := p2.Y - p1.Y
-// 	dz := p2.Z - p1.Z
-
-// 	steps := int(math.Max(math.Abs(dx), math.Abs(dy)))
-// 	xInc := dx / float64(steps)
-// 	yInc := dy / float64(steps)
-// 	zInc := dz / float64(steps)
-
-// 	for i := 0; i < steps; i++ {
-// 		x := int(p1.X + float64(i) * xInc)
-// 		y := int(p1.Y + float64(i) * yInc)
-// 		z := p1.Z + float64(i) * zInc
-
-// 		if x >= 0 && x < engine.Cnv.Width() && y >= 0 && y < engine.Cnv.Height() && z < engine.ZBuf[x][y] {
-// 			engine.ZBuf[x][y] = z
-// 			engine.Cnv.SetPixel(x, y, color.Black)
-// 		}
-// 	}
-// }
 
 func DrawSquare(engine *inter.MyGraphicsEngine, slice []inter.Square) {
 	for _, square := range slice {
@@ -151,8 +129,68 @@ func drawPolygon(engine *inter.MyGraphicsEngine, polygon inter.Polygon) {
 			}
 		}
 
-		// DrawLine3D(engine, polygon.P2, polygon.P3, color.Black)
-		// DrawLine3D(engine, polygon.P1, polygon.P3, color.Black)
-		// DrawLine3D(engine, polygon.P1, polygon.P2, color.Black)
+		drawBoldEdge(engine, polygon.P2, polygon.P3, polygon.Color, color.Black, 1)
+		drawBoldEdge(engine, polygon.P1, polygon.P3, polygon.Color, color.Black, 1)
+	}
+}
+
+func drawBoldEdge(engine *inter.MyGraphicsEngine, p0, p1 inter.Vec4, fillColor, borderColor color.Color, thickness float64) {
+	var (
+		deltaX  = p1.X - p0.X
+		deltaY  = p1.Y - p0.Y
+		deltaZ  = p1.Z - p0.Z
+		deltaW  = p1.W - p0.W
+		lengthX = math.Abs(deltaX)
+		lengthY = math.Abs(deltaY)
+		steps   int
+	)
+
+	if lengthX >= lengthY {
+		steps = int(lengthX)
+	} else {
+		steps = int(lengthY)
+	}
+
+	var (
+		xIncrement = deltaX / float64(steps)
+		yIncrement = deltaY / float64(steps)
+		zIncrement = deltaZ / float64(steps)
+		wIncrement = deltaW / float64(steps)
+		p          = p0
+	)
+
+	for i := 0; i < steps; i++ {
+		px := int(math.Round(p.X))
+		py := int(math.Round(p.Y))
+
+		for dx := -int(thickness); dx <= int(thickness); dx++ {
+			for dy := -int(thickness); dy <= int(thickness); dy++ {
+				if px+dx >= 0 && py+dy >= 0 && px+dx < engine.Cnv.Width() && py+dy < engine.Cnv.Height() {
+					if p.Z <= engine.ZBuf[px+dx][py+dy] {
+						engine.ZBuf[px+dx][py+dy] = p.Z
+						engine.Cnv.SetPixel(px+dx, py+dy, borderColor)
+					}
+				}
+			}
+		}
+
+		p.X += xIncrement
+		p.Y += yIncrement
+		p.Z += zIncrement
+		p.W += wIncrement
+	}
+
+	// Draw the last pixel with the fill color
+	px := int(math.Round(p1.X))
+	py := int(math.Round(p1.Y))
+	for dx := -int(thickness); dx <= int(thickness); dx++ {
+		for dy := -int(thickness); dy <= int(thickness); dy++ {
+			if px+dx >= 0 && py+dy >= 0 && px+dx < engine.Cnv.Width() && py+dy < engine.Cnv.Height() {
+				if p.Z <= engine.ZBuf[px+dx][py+dy] {
+					engine.ZBuf[px+dx][py+dy] = p.Z
+					engine.Cnv.SetPixel(px+dx, py+dy, borderColor)
+				}
+			}
+		}
 	}
 }

@@ -3,8 +3,8 @@ package camera
 import (
 	//"fmt"
 
-	"github.com/Mamvriyskiy/CourseWorkCG/inter"
-	"github.com/Mamvriyskiy/CourseWorkCG/mathfunc"
+	"../inter"
+	"../mathfunc"
 )
 
 // func CreateCamera(height, width int) [4][4]float64 {

@@ -1,7 +1,6 @@
 package drawobj
 
 import (
-	"fmt"
 
 	"../inter"
 )
@@ -9,8 +8,6 @@ import (
 func DrawSceneEx(engine *inter.MyGraphicsEngine) {
 	copySlice := make([]inter.Square, len(engine.Object))
 	copy(copySlice, engine.Object)
-
-	fmt.Println(copySlice[0])
 	createSceneObj(copySlice, engine.Camera.Matrix)
 
 	DrawSquare(engine, copySlice)

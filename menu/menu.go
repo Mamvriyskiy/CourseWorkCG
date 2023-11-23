@@ -10,12 +10,12 @@ import (
 	"fyne.io/fyne/v2/theme"
 	"fyne.io/fyne/v2/widget"
 
-	"github.com/Mamvriyskiy/CourseWorkCG/polygon"
-	"github.com/Mamvriyskiy/CourseWorkCG/inter"
-	"github.com/Mamvriyskiy/CourseWorkCG/camera"
-	"github.com/Mamvriyskiy/CourseWorkCG/drawobj"
-	"github.com/Mamvriyskiy/CourseWorkCG/graphics"
-	"github.com/Mamvriyskiy/CourseWorkCG/mathfunc"
+	"../polygon"
+	"../inter"
+	"../camera"
+	"../drawobj"
+	"../graphics"
+	"../mathfunc"
 	"image/color"
 )
 

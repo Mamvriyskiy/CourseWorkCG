@@ -36,7 +36,7 @@ func MenuEx(w fyne.Window, a fyne.App, img *fyne.Container, engine *inter.MyGrap
 		createSceneButton = widget.NewButton("Создать сцену", func() {
 		sizeSceneA, sizeSceneB, errA, errB := CheckEntrySize(entryA.Text, entryB.Text)
 		if errA.message == "" && errB.message == "" {
-			engine.Object = polygon.CreateSceneEx(sizeSceneA, sizeSceneB)
+			engine.Object, engine.Step = polygon.CreateSceneEx(sizeSceneA, sizeSceneB)
 			engine.Camera.Matrix = camera.CreateCamera(engine.Camera, engine.ProjMatrix)
 			drawobj.DrawSceneEx(engine)
 			//camera.CreateCamera(&Scene, engine, points)
@@ -178,6 +178,15 @@ func MenuEx(w fyne.Window, a fyne.App, img *fyne.Container, engine *inter.MyGrap
 		buttonDownCamera, buttonLeftCamera, buttonRightCamera, buttonZoomInCamera, buttonZoomOutCamera, 
 		buttonRotateLeftCamera, buttonRotateRightCamera))
 
+	//Выбор номер яячейки фигуры
+	var entryX, entryY *widget.Entry
+	{
+		entryX = widget.NewEntry()
+		entryX.SetPlaceHolder("номер по X")
+		entryY = widget.NewEntry()
+		entryY.SetPlaceHolder("номер по Y")
+	}
+
 	// Выбор фигуры
 	var radioGroupObj, radioRotateObj *widget.RadioGroup
 	var radioButton *widget.Button
@@ -187,17 +196,32 @@ func MenuEx(w fyne.Window, a fyne.App, img *fyne.Container, engine *inter.MyGrap
 														"прямые рельсы", "дерево"}, func(s string) {
 		})
 
-		radioButton = widget.NewButton("Выбрать", func() {
-			fmt.Println(radioGroupObj.Selected)
-		})
-
 		radioRotateObj = widget.NewRadioGroup([]string{"север", "юг", 
 			"запад", "восток"}, func(s string) {
 		})
+
+		radioButton = widget.NewButton("Создать", func() {
+			fmt.Println(radioGroupObj.Selected)
+			numA, numB, errA, errB := CheckEntrySize(entryX.Text, entryY.Text)
+			if errA.message == "" && errB.message == "" {
+				fmt.Println(numA, numB)
+				engine.Object = polygon.CreateObjectForScene(engine.Object, numA, numB, radioGroupObj.Selected, radioRotateObj.Selected, engine.Step)
+				renderScene(engine)
+				img.Refresh()
+			} else {
+				entryA.SetText("")
+				entryA.SetPlaceHolder(errA.Error())
+	
+				entryB.SetText("")
+				entryB.SetPlaceHolder(errB.Error())
+			}
+			fmt.Println()
+		})
 	}
 
+
 	choiceObj := container.New(layout.NewVBoxLayout(), labelTextObj, radioGroupObj)
-	rotateObj := container.New(layout.NewVBoxLayout(), labelTextRotate, radioRotateObj)
+	rotateObj := container.New(layout.NewVBoxLayout(), labelTextRotate, radioRotateObj, entryX, entryY)
 
 	settingsObj := container.New(layout.NewHBoxLayout(), choiceObj, rotateObj)
 

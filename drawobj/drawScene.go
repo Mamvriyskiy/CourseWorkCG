@@ -1,8 +1,11 @@
 package drawobj
 
 import (
-	"math"
+	//"fmt"
+	//"fmt"
 	"image/color"
+	"math"
+
 	"../inter"
 	"../mathfunc"
 )
@@ -11,10 +14,16 @@ func DrawSquare(engine *inter.MyGraphicsEngine, slice []inter.Square) {
 	for _, square := range slice {
 		square.Triagle1.UpdatePolygon(engine.Cnv.Width(), engine.Cnv.Height())
 		square.Triagle2.UpdatePolygon(engine.Cnv.Width(), engine.Cnv.Height())
-		// fmt.Println(square.Triagle1.P3)
-		// fmt.Println(square.Triagle2.P3)
-		drawPolygon(engine, square.Triagle1)
-		drawPolygon(engine, square.Triagle2)
+		if square.Object == 100 {
+			drawBoldEdge(engine, square.Triagle2.P2, square.Triagle2.P3, square.Triagle1.Color, 1.5)
+			drawBoldEdge(engine, square.Triagle1.P1, square.Triagle1.P3, square.Triagle1.Color, 1.5)
+		} else if square.Object == 101 {
+			drawBoldEdge(engine, square.Triagle2.P1, square.Triagle2.P3, square.Triagle1.Color, 1.5)
+			drawBoldEdge(engine, square.Triagle1.P2, square.Triagle1.P3, square.Triagle1.Color, 1.5)
+		} else {
+			drawPolygon(engine, square.Triagle1)
+			drawPolygon(engine, square.Triagle2)
+		}
 	}
 }
 
@@ -129,12 +138,12 @@ func drawPolygon(engine *inter.MyGraphicsEngine, polygon inter.Polygon) {
 			}
 		}
 
-		drawBoldEdge(engine, polygon.P2, polygon.P3, polygon.Color, color.Black, 1)
-		drawBoldEdge(engine, polygon.P1, polygon.P3, polygon.Color, color.Black, 1)
+		drawBoldEdge(engine, polygon.P2, polygon.P3, color.Black, 1)
+		drawBoldEdge(engine, polygon.P1, polygon.P3, color.Black, 1)
 	}
 }
 
-func drawBoldEdge(engine *inter.MyGraphicsEngine, p0, p1 inter.Vec4, fillColor, borderColor color.Color, thickness float64) {
+func drawBoldEdge(engine *inter.MyGraphicsEngine, p0, p1 inter.Vec4, borderColor color.Color, thickness float64) {
 	var (
 		deltaX  = p1.X - p0.X
 		deltaY  = p1.Y - p0.Y

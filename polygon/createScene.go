@@ -1,7 +1,7 @@
 package polygon
 
 import (
-	"fmt"
+	//"fmt"
 	"image/color"
 
 	"../inter"
@@ -40,7 +40,7 @@ func createSquareBackFront(x1, y1, z1, x2, y2, z2 float64, clr color.Color) inte
 	return square
 }
 
-func CreateSceneEx(a, b int) []inter.Square {
+func CreateSceneEx(a, b int) ([]inter.Square, float64) {
 	countSquare := a * b * 2 + a * 2 + b * 2
 	// fmt.Println(countSquare)
 
@@ -50,10 +50,9 @@ func CreateSceneEx(a, b int) []inter.Square {
 	stepA := (sizeA * 2.0) / float64(a)
 	stepB := (sizeB * 2.0) / float64(b)
 
-	fmt.Println(sizeA, sizeB)
 	scene := createScene(sizeA, sizeB, stepA, stepB, countSquare)	
 	
-	return scene
+	return scene, stepA
 }
 
 func createScene(sizeA, sizeB, stepA, stepB float64, countSquare int) []inter.Square {
@@ -61,14 +60,21 @@ func createScene(sizeA, sizeB, stepA, stepB float64, countSquare int) []inter.Sq
 	color_cron := color.NRGBA{0, 154, 23, 255}
 	k := 0
 
+	numX := 1
+	numY := 1
 	for x := -sizeA; x < sizeA; x += stepA {
 		for z := -sizeB; z < sizeB; z += stepB {
 			//низ и вверх
 			scene[k] = createSquareUpDown(x, 0, z, x + stepA, 0, z + stepB, color_cron)	
 			k++
 			scene[k] = createSquareUpDown(x, 0.2, z, x + stepA, 0.2, z + stepB, color_cron)	
+			scene[k].NumberX = numX
+			scene[k].NumberY = numY
+			numY++
 			k++
 		}
+		numY = 1
+		numX++
 	}
 
 	//левая и правая
@@ -87,6 +93,5 @@ func createScene(sizeA, sizeB, stepA, stepB float64, countSquare int) []inter.Sq
 		k++
 	}
 
-	fmt.Println(k)
 	return scene
 }

@@ -41,6 +41,8 @@ type Square struct  {
 	Triagle1 Polygon
 	Triagle2 Polygon
 
+	NumberX int
+	NumberY int
 	Object int
 }
 
@@ -69,6 +71,7 @@ type MyGraphicsEngine struct {
 	ProjMatrix [4][4]float64
 
 	Object []Square
+	Step float64
 }
 
 type Camera struct {

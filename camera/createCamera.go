@@ -1,6 +1,8 @@
 package camera
 
 import (
+	//"fmt"
+
 	"../inter"
 	"../mathfunc"
 )
@@ -13,6 +15,7 @@ func InitCamera() inter.Camera {
 	var camera inter.Camera
     camera.VCamera = mathfunc.MakeVec3(0, 2, -5)
 	camera.VTarget = mathfunc.MakeVec3(0, 0, 1)
+	camera.VForward = mathfunc.MakeVec3(0, 0, 1)
 
 	return camera
 }
@@ -33,16 +36,4 @@ func CreateCamera(camera inter.Camera, proj [4][4]float64) [4][4]float64 {
 	return newM
 }
 
-
-// type Camera struct {
-// 	Pos Vec3
-
-// 	VCamera  Vec3
-// 	VLookDir Vec4
-// 	FYaw     float64
-// 	FTheta   float64
-// 	VTarget  Vec3
-
-// 	VForward Vec3
-// }
 

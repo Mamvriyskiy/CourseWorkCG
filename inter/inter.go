@@ -5,6 +5,17 @@ import (
 	"image/color"
 )
 
+const (
+	RAILS = 3
+	TREE = 15
+	STATION = 9
+
+	TRAINHEAD = 1
+	TRAIN = 2
+	RAILSCIRCLE = 4
+	RAILSFORK = 5
+)
+
 func (dot *Vec4) CreateDot (x, y, z, w float64) {
 	dot.X = x
 	dot.Y = y
@@ -44,6 +55,7 @@ type Square struct  {
 	NumberX int
 	NumberY int
 	Object int
+	TypeObj int
 }
 
 type Canvas interface {

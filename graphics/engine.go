@@ -1,36 +1,22 @@
 package graphics
 
 import (
-	//"fmt"
-	//"fmt"
-	//"fmt"
 	"image/color"
 	//"math"
 
 	"../inter"
 )
 
-func NewMyGraphicsEngine(cnv ImageCanvas, flag bool) *inter.MyGraphicsEngine {
+func NewMyGraphicsEngine(cnv ImageCanvas) *inter.MyGraphicsEngine {
 	var engine *inter.MyGraphicsEngine
-	if !flag {
-		engine = new(inter.MyGraphicsEngine)
+	engine = new(inter.MyGraphicsEngine)
 
-		engine.Cnv = cnv
-	}
-
-	engine.ZBuf = CreateZBuf(engine.Cnv.Width(), engine.Cnv.Height())
-
-	if !flag {
-		engine.SBuf = make([][]float64, engine.Cnv.Width())
-		for i := range engine.SBuf {
-			engine.SBuf[i] = make([]float64, engine.Cnv.Height())
-			for j := range engine.SBuf[i] {
-				engine.SBuf[i][j] = 100000
-			}
-		}
-	}
+	engine.Cnv = cnv
 
 	engine.Cnv.Fill(color.RGBA{3, 215, 252, 140})
+	engine.ZBuf = CreateZBuf(engine.Cnv.Width(), engine.Cnv.Height())
+
+	engine.SBuf =  CreateZBuf(engine.Cnv.Width(), engine.Cnv.Height())
 
 	return engine
 }

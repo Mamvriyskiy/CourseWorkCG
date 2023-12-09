@@ -1,8 +1,7 @@
 package drawobj
 
 import (
-	//"fmt"
-	//"fmt"
+	"fmt"
 	"image/color"
 	"math"
 
@@ -15,11 +14,13 @@ func DrawSquare(engine *inter.MyGraphicsEngine, slice []inter.Square) {
 		square.Triagle1.UpdatePolygon(engine.Cnv.Width(), engine.Cnv.Height())
 		square.Triagle2.UpdatePolygon(engine.Cnv.Width(), engine.Cnv.Height())
 		if square.Object == 100 {
-			drawBoldEdge(engine, square.Triagle2.P2, square.Triagle2.P3, square.Triagle1.Color, 1.5)
-			drawBoldEdge(engine, square.Triagle1.P1, square.Triagle1.P3, square.Triagle1.Color, 1.5)
+			drawBoldEdge(engine, square.Triagle2.P2, square.Triagle2.P3, square.Triagle1.Color, 0)
+			drawBoldEdge(engine, square.Triagle1.P1, square.Triagle1.P3, square.Triagle1.Color, 0)
 		} else if square.Object == 101 {
-			drawBoldEdge(engine, square.Triagle2.P1, square.Triagle2.P3, square.Triagle1.Color, 1.5)
-			drawBoldEdge(engine, square.Triagle1.P2, square.Triagle1.P3, square.Triagle1.Color, 1.5)
+			drawBoldEdge(engine, square.Triagle2.P1, square.Triagle2.P3, square.Triagle1.Color, 0)
+			drawBoldEdge(engine, square.Triagle1.P2, square.Triagle1.P3, square.Triagle1.Color, 0)
+		} else if square.Object == 102 {
+			//drawArc(engine, square.Triagle1.P1, square.Triagle2.P3, 1, square.Triagle1.Color)
 		} else {
 			drawPolygon(engine, square.Triagle1)
 			drawPolygon(engine, square.Triagle2)
@@ -31,7 +32,7 @@ func drawPolygon(engine *inter.MyGraphicsEngine, polygon inter.Polygon) {
 	p0, p1, p2 := polygon.P1, polygon.P2, polygon.P3
 
 	if p0.Y > p1.Y {
-		p0, p1 = p1, p0
+		p0, p1 = p1, p0 
 	}
 
 	if p0.Y > p2.Y {
@@ -203,3 +204,54 @@ func drawBoldEdge(engine *inter.MyGraphicsEngine, p0, p1 inter.Vec4, borderColor
 		}
 	}
 }
+
+func drawArc(engine *inter.MyGraphicsEngine, p0, p1 inter.Vec4, thickness float64, borderColor color.Color) {
+	// Найти центр и радиус дуги
+	centerX := (p0.X + p1.X) / 2.0
+	centerY := (p0.Y + p1.Y) / 2.0
+	radius := math.Sqrt(math.Pow(p1.X-centerX, 2) + math.Pow(p1.Y-centerY, 2))
+
+	// Найти углы начала и конца дуги
+	startAngle := math.Atan2(p0.Y-centerY, p0.X-centerX)
+	endAngle := math.Atan2(p1.Y-centerY, p1.X-centerX)
+
+	if startAngle > endAngle {
+		startAngle, endAngle = endAngle, startAngle
+	}
+
+	// Вызвать функцию рисования дуги
+	drawBoldArcFromCenter(engine, inter.Vec3{centerX, centerY, p1.Z}, radius, startAngle, endAngle, p0.Z, p1.Z, thickness, borderColor)
+}
+
+func drawBoldArcFromCenter(engine *inter.MyGraphicsEngine, center inter.Vec3, radius, startAngle, endAngle, startZ, endZ, thickness float64, borderColor color.Color) {
+	theta := startAngle
+	deltaTheta := 0.01
+
+	fmt.Println(theta, endAngle)
+	for theta <= endAngle {
+		x := center.X + radius*math.Cos(theta)
+		y := center.Y + radius*math.Sin(theta)
+		z := startZ + (theta-startAngle)/(endAngle-startAngle)*(endZ-startZ)
+
+		drawBoldPixel(engine, inter.Vec3{x, y, z}, thickness, borderColor)
+
+		theta += deltaTheta
+	}
+}
+
+func drawBoldPixel(engine *inter.MyGraphicsEngine, p inter.Vec3, thickness float64, borderColor color.Color) {
+	for dx := -int(thickness); dx <= int(thickness); dx++ {
+		for dy := -int(thickness); dy <= int(thickness); dy++ {
+			px := int(math.Round(p.X)) + dx
+			py := int(math.Round(p.Y)) + dy
+
+			if px >= 0 && py >= 0 && px < engine.Cnv.Width() && py < engine.Cnv.Height() {
+				if p.Z <= engine.ZBuf[px][py] {
+					engine.ZBuf[px][py] = p.Z
+					engine.Cnv.SetPixel(px, py, color.Black)
+				}
+			}
+		}
+	}
+}
+

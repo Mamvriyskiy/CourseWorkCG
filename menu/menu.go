@@ -19,7 +19,7 @@ import (
 	"image/color"
 )
 
-func MenuEx(w fyne.Window, a fyne.App, img *fyne.Container, engine *inter.MyGraphicsEngine) *fyne.Container {
+func MenuEx(w fyne.Window, a fyne.App, img *fyne.Container, engine *inter.MyGraphicsEngine, cnv graphics.ImageCanvas) *fyne.Container {
 	//var scene []inter.Square
 	// Ввод размерности сцены
 	var entryA, entryB *widget.Entry
@@ -30,6 +30,7 @@ func MenuEx(w fyne.Window, a fyne.App, img *fyne.Container, engine *inter.MyGrap
 		entryB.SetPlaceHolder("от 1 до 100")
 	}
 
+
 	// Кнопки создания и отчистки сцены
 	var createSceneButton, clearButton *widget.Button
 	{
@@ -39,7 +40,7 @@ func MenuEx(w fyne.Window, a fyne.App, img *fyne.Container, engine *inter.MyGrap
 			engine.Object, engine.Step = polygon.CreateSceneEx(sizeSceneA, sizeSceneB)
 			engine.Camera.Matrix = camera.CreateCamera(engine.Camera, engine.ProjMatrix)
 			drawobj.DrawSceneEx(engine)
-			//camera.CreateCamera(&Scene, engine, points)
+			img.Refresh()
 		} else {
 			entryA.SetText("")
 			entryA.SetPlaceHolder(errA.Error())
@@ -47,11 +48,14 @@ func MenuEx(w fyne.Window, a fyne.App, img *fyne.Container, engine *inter.MyGrap
 			entryB.SetText("")
 			entryB.SetPlaceHolder(errB.Error())
 		}
-
-		img.Refresh()
 		})
 
 		clearButton = widget.NewButton("Очистить", func() {
+			engine.ZBuf = nil
+			engine.Cnv.Fill(color.RGBA{3, 215, 252, 140})
+			engine.ZBuf = graphics.CreateZBuf(engine.Cnv.Height(), engine.Cnv.Width())
+	
+			img.Refresh()
 		})
 	}
 
@@ -66,7 +70,7 @@ func MenuEx(w fyne.Window, a fyne.App, img *fyne.Container, engine *inter.MyGrap
 		labelTextObj = widget.NewLabel("Выберите объект")
 		labelTextObj.TextStyle = fyne.TextStyle{Bold: true, Italic: false}
 
-		labelTextRotate = widget.NewLabel("направление")
+		labelTextRotate = widget.NewLabel("Действие")
 		labelTextRotate.TextStyle = fyne.TextStyle{Bold: true, Italic: false}
 
 		labelTextControl = widget.NewLabel("Управление сценой")
@@ -187,6 +191,14 @@ func MenuEx(w fyne.Window, a fyne.App, img *fyne.Container, engine *inter.MyGrap
 		entryY.SetPlaceHolder("номер по Y")
 	}
 
+	var entryX2, entryY2 *widget.Entry
+	{
+		entryX2 = widget.NewEntry()
+		entryX2.SetPlaceHolder("номер по X")
+		entryY2 = widget.NewEntry()
+		entryY2.SetPlaceHolder("номер по Y")
+	}
+
 	// Выбор фигуры
 	var radioGroupObj, radioRotateObj *widget.RadioGroup
 	var radioButton *widget.Button
@@ -196,24 +208,28 @@ func MenuEx(w fyne.Window, a fyne.App, img *fyne.Container, engine *inter.MyGrap
 														"прямые рельсы", "дерево"}, func(s string) {
 		})
 
-		radioRotateObj = widget.NewRadioGroup([]string{"север", "юг", 
-			"запад", "восток"}, func(s string) {
+		radioRotateObj = widget.NewRadioGroup([]string{"создать", "удалить", 
+			"повернуть"}, func(s string) {
 		})
 
 		radioButton = widget.NewButton("Создать", func() {
-			fmt.Println(radioGroupObj.Selected)
+
 			numA, numB, errA, errB := CheckEntrySize(entryX.Text, entryY.Text)
-			if errA.message == "" && errB.message == "" {
-				fmt.Println(numA, numB)
-				engine.Object = polygon.CreateObjectForScene(engine.Object, numA, numB, radioGroupObj.Selected, radioRotateObj.Selected, engine.Step)
+			var errA2, errB2 MyError
+			var numA2, numB2 int
+			if radioGroupObj.Selected == "головной вагон" || radioGroupObj.Selected == "вагон" {
+				numA2, numB2, errA2, errB2 = CheckEntrySize(entryX2.Text, entryY2.Text)
+			}
+			if errA.message == "" && errB.message == "" && errA2.message == "" && errB2.message == ""{
+				engine.Object = polygon.CreateObjectForScene(engine.Object, numA, numB, numA2, numB2, radioGroupObj.Selected, radioRotateObj.Selected, engine.Step)
 				renderScene(engine)
 				img.Refresh()
 			} else {
-				entryA.SetText("")
-				entryA.SetPlaceHolder(errA.Error())
+				entryX.SetText("")
+				entryX.SetPlaceHolder(errA.Error())
 	
-				entryB.SetText("")
-				entryB.SetPlaceHolder(errB.Error())
+				entryY.SetText("")
+				entryY.SetPlaceHolder(errB.Error())
 			}
 			fmt.Println()
 		})
@@ -221,7 +237,7 @@ func MenuEx(w fyne.Window, a fyne.App, img *fyne.Container, engine *inter.MyGrap
 
 
 	choiceObj := container.New(layout.NewVBoxLayout(), labelTextObj, radioGroupObj)
-	rotateObj := container.New(layout.NewVBoxLayout(), labelTextRotate, radioRotateObj, entryX, entryY)
+	rotateObj := container.New(layout.NewVBoxLayout(), labelTextRotate, radioRotateObj, entryX, entryY, entryX2, entryY2)
 
 	settingsObj := container.New(layout.NewHBoxLayout(), choiceObj, rotateObj)
 

@@ -1,7 +1,6 @@
 package polygon
 
 import (
-	"fmt"
 	"math"
 
 	"../inter"

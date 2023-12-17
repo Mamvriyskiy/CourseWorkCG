@@ -60,7 +60,7 @@ func MenuEx(w fyne.Window, a fyne.App, img *fyne.Container, engine *inter.MyGrap
 	}
 
 	// Надписи в меню
-	var labelTextCamera, spacerText, labelTextObj, labelTextRotate, labelTextControl *widget.Label
+	var labelTextCamera, spacerText, labelTextObj, labelTextRotate *widget.Label
 	{
 		labelTextCamera = widget.NewLabel("Управление камерой")
 		labelTextCamera.TextStyle = fyne.TextStyle{Bold: true, Italic: false}
@@ -72,14 +72,9 @@ func MenuEx(w fyne.Window, a fyne.App, img *fyne.Container, engine *inter.MyGrap
 
 		labelTextRotate = widget.NewLabel("Действие")
 		labelTextRotate.TextStyle = fyne.TextStyle{Bold: true, Italic: false}
-
-		labelTextControl = widget.NewLabel("Управление сценой")
-		labelTextControl.TextStyle = fyne.TextStyle{Bold: true, Italic: false}
 	}
 	spacer := container.NewCenter(spacerText)
 	text := container.NewCenter(labelTextCamera)
-
-	labelTextControlScene := container.NewCenter(labelTextControl)
 
 	// Управление камерой через меню
 	var buttonUpCamera, buttonDownCamera, buttonLeftCamera, buttonRightCamera, 
@@ -228,40 +223,6 @@ func MenuEx(w fyne.Window, a fyne.App, img *fyne.Container, engine *inter.MyGrap
 
 	settingsObj := container.New(layout.NewHBoxLayout(), choiceObj, rotateObj)
 
-	// Управление сценой
-	var buttonUpScene, buttonDownScene, buttonLeftScene, buttonRightScene, 
-	buttonRotateLeftScene, buttonRotateRightScene *widget.Button
-	{
-		buttonUpScene = widget.NewButton("T", func() {
-			// Действие, выполняемое при нажатии на кнопку
-		})
-
-		buttonDownScene = widget.NewButton("F", func() {
-			// Действие, выполняемое при нажатии на кнопку
-		})
-
-		buttonLeftScene = widget.NewButton("G", func() {
-			// Действие, выполняемое при нажатии на кнопку
-		})
-
-		buttonRightScene = widget.NewButton("H", func() {
-			// Действие, выполняемое при нажатии на кнопку
-		})
-
-		buttonRotateLeftScene = widget.NewButton("L", func() {
-			// Действие, выполняемое при нажатии на кнопку
-		})
-
-		buttonRotateRightScene = widget.NewButton("R", func() {
-			// Действие, выполняемое при нажатии на кнопку
-		})
-	}
-
-	cntScene := container.NewCenter(container.New(layout.NewHBoxLayout(), buttonUpScene, 
-		buttonDownScene, buttonLeftScene, buttonRightScene,
-		buttonRotateLeftScene, buttonRotateRightScene))
-
-
 	// Смена тем(светлый, темный)
 	var btnDark, btnLight *widget.Button
 	{	
@@ -279,7 +240,6 @@ func MenuEx(w fyne.Window, a fyne.App, img *fyne.Container, engine *inter.MyGrap
 		createSeparatorLine(1), createSceneButton, clearButton, 
 		createSeparatorLine(3), text,cntCamera,  
 		createSeparatorLine(3), settingsObj, radioButton,
-		createSeparatorLine(3), labelTextControlScene, cntScene,
 		createSeparatorLine(3), 
 		btnDark, btnLight)
 

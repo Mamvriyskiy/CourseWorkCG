@@ -2,7 +2,6 @@ package polygon
 
 import (
 	//"fmt"
-	"fmt"
 	"image/color"
 
 	"../inter"
@@ -15,14 +14,12 @@ func CreateObjectForScene(objects []inter.Square, a, b int, obj, do string, step
 				objects[i].Object = len(objects)
 				objects = createObj(objects, obj, step, objects[i].Triagle1.P1.X, objects[i].Triagle1.P1.Z, i)
 			} else if do == "удалить" {
-				fmt.Println("Len:", len(objects))
+				// fmt.Println("Len:", len(objects))
 				objects = deleteObj(objects, i)
-				fmt.Println("Len:", len(objects))
+				// fmt.Println("Len:", len(objects))
 			} else {
-				rotateObj(objects[i], 90)
-				fmt.Println("Повернуть");
+				objects = rotateObj(objects, i, 90)
 			}
-			fmt.Println(len(objects))
 			break
 		}
 	}

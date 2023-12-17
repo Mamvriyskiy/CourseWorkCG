@@ -9,9 +9,9 @@ const (
 	RAILS = 3
 	TREE = 15
 	STATION = 9
+	TRAINHEAD = 10
+	TRAIN = 6
 
-	TRAINHEAD = 1
-	TRAIN = 2
 	RAILSCIRCLE = 4
 	RAILSFORK = 5
 )

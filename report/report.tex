@@ -1,0 +1,19 @@
+\documentclass[a4paper,14pt, unknownkeysallowed]{extreport}
+
+\include{parts/package.tex}
+
+\begin{document}
+
+% \include{parts/title.tex}
+
+\renewcommand{\contentsname}{Содержание} % Переименовать table of contents
+\tableofcontents
+\setcounter{page}{2}
+    \include{parts/introduction.tex}
+    \include{parts/analis.tex}
+    \include{parts/construction.tex}
+    \include{parts/techn.tex}
+    % \include{parts/research.tex}
+    % \include{parts/end.tex}
+    \include{parts/biblio.tex}
+\end{document}

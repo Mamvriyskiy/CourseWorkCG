@@ -12,7 +12,7 @@ const (
 	TRAINHEAD = 10
 	TRAIN = 6
 
-	RAILSCIRCLE = 4
+	RAILSCIRCLE = 3
 	RAILSFORK = 5
 )
 
@@ -55,7 +55,9 @@ type Square struct  {
 	NumberX int
 	NumberY int
 	Object int
+	Object2 int
 	TypeObj int
+	TypeObj2 int
 }
 
 type Canvas interface {
@@ -79,11 +81,13 @@ type MyGraphicsEngine struct {
 
 	Camera Camera
 	LightCamera Camera
+	PreobMatrix [4][4]float64
 	ZBufToSBuf [4][4]float64
 	ProjMatrix [4][4]float64
 
 	Object []Square
 	Step float64
+	NoLine int
 }
 
 type Camera struct {

@@ -30,8 +30,15 @@ func main() {
 	engine.ProjMatrix = mathfunc.MakeFovProjectionM(90.0, float64(engine.Cnv.Height())/float64(engine.Cnv.Width()), 1.0, 100.0)
 	engine.Camera = camera.InitCamera()
 	engine.LightCamera = camera.InitLightCamera()
+	// engine.LightCamera.Matrix, _ = camera.CreateCamera(engine.LightCamera, engine.ProjMatrix, 0)
+	engine.LightCamera.Matrix = [4][4]float64{
+		{-0.023098907820484, 0, -1.0096703061025305, -0.9995736030415052},
+		{0, 1, 0, 0},
+		{0.7907341181203336, 0, -0.02949446697099902, -0.02919952230128903},
+		{0.138593446922904, -3, 5.047920826514173, 5.997441618249031},
+	}
 
-	//canvasM := canvasWithMouseEvents()
+
 
 	rast := canvas.NewRasterFromImage(cnv.Image())
 
@@ -48,15 +55,3 @@ func main() {
 	w.Resize(fyne.NewSize(width, height))
 	w.ShowAndRun()
 }
-
-// func canvasWithMouseEvents() *fyne.Container {
-// 	c := canvas.NewRasterWithPixels(func(x, y, _, _ int) color.Color {
-// 		return color.Black
-// 	})
-
-// 	c.OnTapped = func(ev *fyne.PointEvent) {
-// 		fmt.Printf("Clicked at (%d, %d)\n", int(ev.Position.X), int(ev.Position.Y))
-// 	}
-
-// 	return container.New(layout.NewCenterLayout(), c)
-// }

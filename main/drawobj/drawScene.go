@@ -1,34 +1,77 @@
 package drawobj
 
 import (
-	"fmt"
 	"image/color"
 	"math"
-
 	"../inter"
 	"../mathfunc"
 )
 
-func DrawSquare(engine *inter.MyGraphicsEngine, slice []inter.Square) {
+func DrawSquare(engine *inter.MyGraphicsEngine, slice []inter.Square, flag bool) {
 	for _, square := range slice {
 		square.Triagle1.UpdatePolygon(engine.Cnv.Width(), engine.Cnv.Height())
 		square.Triagle2.UpdatePolygon(engine.Cnv.Width(), engine.Cnv.Height())
-		if square.Object == 100 {
+		if square.Object == 100 && flag == true {
 			drawBoldEdge(engine, square.Triagle2.P2, square.Triagle2.P3, square.Triagle1.Color, 1.5)
 			drawBoldEdge(engine, square.Triagle1.P1, square.Triagle1.P3, square.Triagle1.Color, 1.5)
-		} else if square.Object == 101 {
+		} else if square.Object == 101 && flag == true {
 			drawBoldEdge(engine, square.Triagle2.P1, square.Triagle2.P3, square.Triagle1.Color, 1.5)
 			drawBoldEdge(engine, square.Triagle1.P2, square.Triagle1.P3, square.Triagle1.Color, 1.5)
-		} else if square.Object == 102 {
-			//drawArc(engine, square.Triagle1.P1, square.Triagle2.P3, 1, square.Triagle1.Color)
+		} else if square.Object == 102 && flag == true {
+			//drawBoldEdge(engine, square.Triagle2.P1, square.Triagle2.P3, square.Triagle1.Color, 1.5)
+			//drawBoldEdge(engine, square.Triagle2.P2, square.Triagle2.P3, square.Triagle1.Color, 1.5)
+			//drawBoldEdge(engine, square.Triagle2.P1, square.Triagle2.P2, square.Triagle1.Color, 1.5)
+
+			// drawBoldEdge(engine, square.Triagle1.P1, square.Triagle1.P3, square.Triagle1.Color, 1.5)
+			// drawBoldEdge(engine, square.Triagle1.P2, square.Triagle1.P3, square.Triagle1.Color, 1.5)
+			drawBoldEdge(engine, square.Triagle1.P1, square.Triagle1.P2, square.Triagle1.Color, 1.5)
+			drawBoldEdge(engine, square.Triagle2.P1, square.Triagle2.P2, square.Triagle1.Color, 1.5)
+			// // fmt.Println(square.Triagle2)
+			// // fmt.Println(square.Triagle1)
+			//drawArc(engine, square.Triagle1.P3, square.Triagle1.P3.X - square.Triagle1.P2.X, square.Triagle1.Color, 1)
 		} else {
-			drawPolygon(engine, square.Triagle1)
-			drawPolygon(engine, square.Triagle2)
+			drawPolygon(engine, square.Triagle1, flag)
+			drawPolygon(engine, square.Triagle2, flag)
 		}
 	}
 }
 
-func drawPolygon(engine *inter.MyGraphicsEngine, polygon inter.Polygon) {
+func Vec4Dist(v1 inter.Vec4, v2 inter.Vec4) float64 {
+    dx := v2.X - v1.X
+    dy := v2.Y - v1.Y
+    dz := v2.Z - v1.Z
+    dw := v2.W - v1.W
+
+    return math.Sqrt(dx*dx + dy*dy + dz*dz + dw*dw)
+}
+
+func drawArc(engine *inter.MyGraphicsEngine, center inter.Vec4, radius float64, borderColor color.Color, thickness float64) {
+	x := 0
+	y := int(radius)
+	p := 3 - 2*int(radius)
+
+	for x <= y {
+		for dx := -y; dx <= y; dx++ {
+			for dy := -y; dy <= y; dy++ {
+				if dx*dx+dy*dy <= y*y && center.X + float64(dx) >= 0 && center.Y - float64(dy) >= 0 && 
+				center.X + float64(dx) < float64(engine.Cnv.Width()) && center.Y - float64(dy) < float64(engine.Cnv.Height()) {
+					engine.Cnv.SetPixel(int(center.X)+dx, int(center.Y)-dy, borderColor)
+				}
+			}
+		}
+
+		x++
+
+		if p > 0 {
+			y--
+			p = p + 4*(x-y) + 10
+		} else {
+			p = p + 4*x + 6
+		}
+	}
+}
+
+func drawPolygon(engine *inter.MyGraphicsEngine, polygon inter.Polygon, flag bool) int {
 	p0, p1, p2 := polygon.P1, polygon.P2, polygon.P3
 
 	if p0.Y > p1.Y {
@@ -44,6 +87,8 @@ func drawPolygon(engine *inter.MyGraphicsEngine, polygon inter.Polygon) {
 	}
 
 	dyTotal := p2.Y - p0.Y
+
+	count := 0
 
 	for y := p0.Y; y <= p1.Y; y++ {
 		dySegment := p1.Y - p0.Y
@@ -61,7 +106,10 @@ func drawPolygon(engine *inter.MyGraphicsEngine, polygon inter.Polygon) {
 		b.Add(p0)
 
 		if a.X > b.X {
-			a, b = b, a
+			b.X, a.X = a.X, b.X
+		}
+		if a.X < 0 {
+			a.X = 0
 		}
 
 		for x := a.X; x <= b.X + 4e-1; x++ {
@@ -85,9 +133,25 @@ func drawPolygon(engine *inter.MyGraphicsEngine, polygon inter.Polygon) {
 			px := int(math.Round(p.X))
 			py := int(math.Round(p.Y))
 			if px >= 0 && py >= 0 && px < engine.Cnv.Width() && py < engine.Cnv.Height() {
-				if p.Z < engine.ZBuf[px][py] {
-					engine.ZBuf[px][py] = p.Z
-					engine.Cnv.SetPixel(px, py, polygon.Color)
+				if flag {
+					if p.Z < engine.ZBuf[px][py] {
+						engine.ZBuf[px][py] = p.Z
+						if checkCoords(p.X, p.Y, p.Z, p.W, engine) {
+							engine.Cnv.SetPixel(px, py, polygon.Color)
+						} else {
+							nrgba, _ := polygon.Color.(color.NRGBA)
+							r := uint8(float64(nrgba.R) * 0.6)
+							g := uint8(float64(nrgba.G) * 0.6)
+							b := uint8(float64(nrgba.B) * 0.6)
+							a := nrgba.A 
+							
+							engine.Cnv.SetPixel(px, py, color.NRGBA{r, g, b, a})
+						}
+					}
+				} else {
+					if p.Z < engine.SBuf[px][py] {
+						engine.SBuf[px][py] = p.Z
+					}
 				}
 			}
 		}
@@ -109,9 +173,13 @@ func drawPolygon(engine *inter.MyGraphicsEngine, polygon inter.Polygon) {
 		b.Add(p1)
 
 		if a.X > b.X {
-			a, b = b, a
+			b.X, a.X = a.X, b.X
 		}
 
+		if a.X < 0 {
+			a.X = 0
+		}
+		
 		for x := a.X; x <= b.X + 4e-1; x++ {
 			var (
 				phi float64
@@ -132,16 +200,37 @@ func drawPolygon(engine *inter.MyGraphicsEngine, polygon inter.Polygon) {
 			px := int(math.Round(p.X))
 			py := int(math.Round(p.Y))
 			if px >= 0 && py >= 0 && px < engine.Cnv.Width() && py < engine.Cnv.Height() {
-				if p.Z < engine.ZBuf[px][py] {
-					engine.ZBuf[px][py] = p.Z
-					engine.Cnv.SetPixel(px, py, polygon.Color)
+				if flag {
+					if p.Z < engine.ZBuf[px][py] {
+						engine.ZBuf[px][py] = p.Z
+						if checkCoords(p.X, p.Y, p.Z, p.W, engine) {
+							engine.Cnv.SetPixel(px, py, polygon.Color)
+						} else {
+							nrgba, _ := polygon.Color.(color.NRGBA)
+							r := uint8(float64(nrgba.R) * 0.6)
+							g := uint8(float64(nrgba.G) * 0.6)
+							b := uint8(float64(nrgba.B) * 0.6)
+							a := nrgba.A 
+							
+							engine.Cnv.SetPixel(px, py, color.NRGBA{r, g, b, a})
+						}
+					}
+				} else {
+					if p.Z < engine.SBuf[px][py] {
+						engine.SBuf[px][py] = p.Z
+					}
 				}
 			}
+			count++
 		}
 
-		drawBoldEdge(engine, polygon.P2, polygon.P3, color.Black, 1)
-		drawBoldEdge(engine, polygon.P1, polygon.P3, color.Black, 1)
+		if flag == true && engine.NoLine == 0{
+			drawBoldEdge(engine, polygon.P2, polygon.P3, color.Black, 1)
+			drawBoldEdge(engine, polygon.P1, polygon.P3, color.Black, 1)
+		}
 	}
+
+	return count
 }
 
 func drawBoldEdge(engine *inter.MyGraphicsEngine, p0, p1 inter.Vec4, borderColor color.Color, thickness float64) {
@@ -175,7 +264,7 @@ func drawBoldEdge(engine *inter.MyGraphicsEngine, p0, p1 inter.Vec4, borderColor
 
 		for dx := -int(thickness); dx <= int(thickness); dx++ {
 			for dy := -int(thickness); dy <= int(thickness); dy++ {
-				if px+dx >= 0 && py+dy >= 0 && px+dx < engine.Cnv.Width() && py+dy < engine.Cnv.Height() {
+				if px + dx >= 0 && py+dy >= 0 && px+dx < engine.Cnv.Width() && py+dy < engine.Cnv.Height() {
 					if p.Z <= engine.ZBuf[px+dx][py+dy] {
 						engine.ZBuf[px+dx][py+dy] = p.Z
 						engine.Cnv.SetPixel(px+dx, py+dy, borderColor)
@@ -190,7 +279,6 @@ func drawBoldEdge(engine *inter.MyGraphicsEngine, p0, p1 inter.Vec4, borderColor
 		p.W += wIncrement
 	}
 
-	// Draw the last pixel with the fill color
 	px := int(math.Round(p1.X))
 	py := int(math.Round(p1.Y))
 	for dx := -int(thickness); dx <= int(thickness); dx++ {
@@ -202,40 +290,6 @@ func drawBoldEdge(engine *inter.MyGraphicsEngine, p0, p1 inter.Vec4, borderColor
 				}
 			}
 		}
-	}
-}
-
-func drawArc(engine *inter.MyGraphicsEngine, p0, p1 inter.Vec4, thickness float64, borderColor color.Color) {
-	// Найти центр и радиус дуги
-	centerX := (p0.X + p1.X) / 2.0
-	centerY := (p0.Y + p1.Y) / 2.0
-	radius := math.Sqrt(math.Pow(p1.X-centerX, 2) + math.Pow(p1.Y-centerY, 2))
-
-	// Найти углы начала и конца дуги
-	startAngle := math.Atan2(p0.Y-centerY, p0.X-centerX)
-	endAngle := math.Atan2(p1.Y-centerY, p1.X-centerX)
-
-	if startAngle > endAngle {
-		startAngle, endAngle = endAngle, startAngle
-	}
-
-	// Вызвать функцию рисования дуги
-	drawBoldArcFromCenter(engine, inter.Vec3{centerX, centerY, p1.Z}, radius, startAngle, endAngle, p0.Z, p1.Z, thickness, borderColor)
-}
-
-func drawBoldArcFromCenter(engine *inter.MyGraphicsEngine, center inter.Vec3, radius, startAngle, endAngle, startZ, endZ, thickness float64, borderColor color.Color) {
-	theta := startAngle
-	deltaTheta := 0.01
-
-	fmt.Println(theta, endAngle)
-	for theta <= endAngle {
-		x := center.X + radius*math.Cos(theta)
-		y := center.Y + radius*math.Sin(theta)
-		z := startZ + (theta-startAngle)/(endAngle-startAngle)*(endZ-startZ)
-
-		drawBoldPixel(engine, inter.Vec3{x, y, z}, thickness, borderColor)
-
-		theta += deltaTheta
 	}
 }
 
@@ -254,4 +308,3 @@ func drawBoldPixel(engine *inter.MyGraphicsEngine, p inter.Vec3, thickness float
 		}
 	}
 }
-

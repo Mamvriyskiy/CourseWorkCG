@@ -7,18 +7,41 @@ import (
 	"../inter"
 )
 
+func checkObj(object inter.Square, obj string) bool {
+	if object.TypeObj != inter.RAILS && object.TypeObj != 0 || object.TypeObj2 != 0 {
+		return false
+	}
+
+	if object.TypeObj == inter.RAILS && obj != "вагон" && obj != "головной вагон"  {
+		return false
+	}
+
+	if object.TypeObj != inter.RAILS && (obj == "вагон" || obj == "головной вагон")  {
+		return false
+	}
+
+	return true
+}
+
 func CreateObjectForScene(objects []inter.Square, a, b int, obj, do string, step float64) []inter.Square {
 	for i := 0; i < len(objects); i++ {
 		if objects[i].NumberX == a && objects[i].NumberY == b {
 			if do == "создать" {
-				objects[i].Object = len(objects)
+				if !checkObj(objects[i], obj) {
+					break
+				}
+				if obj == "головной вагон" || obj == "вагон" {
+					objects[i].Object2 = len(objects)
+				} else {
+					objects[i].Object = len(objects)
+				}
 				objects = createObj(objects, obj, step, objects[i].Triagle1.P1.X, objects[i].Triagle1.P1.Z, i)
 			} else if do == "удалить" {
 				// fmt.Println("Len:", len(objects))
 				objects = deleteObj(objects, i)
 				// fmt.Println("Len:", len(objects))
 			} else {
-				objects = rotateObj(objects, i, 90)
+				objects = rotateObj(objects, i, 45)
 			}
 			break
 		}
@@ -28,11 +51,27 @@ func CreateObjectForScene(objects []inter.Square, a, b int, obj, do string, step
 }
 
 func deleteObj(square []inter.Square, i int) []inter.Square {
-	startDelet := square[i].Object
-	endDelet := square[i].Object + square[i].TypeObj
-	newSquare := append(square[: startDelet], square[endDelet : ]...)
+	var newSquare1 []inter.Square
+	if square[i].Object2 != 0 {
+		startDelet2 := square[i].Object2
+		endDelet2 := square[i].Object2 + square[i].TypeObj2
+		newSquare2 := append(square[: startDelet2], square[endDelet2 : ]...)
 
-	return newSquare
+		startDelet1 := newSquare2[i].Object
+		endDelet1 := newSquare2[i].Object + newSquare2[i].TypeObj
+		newSquare1 = append(newSquare2[: startDelet1], newSquare2[endDelet1 : ]...)
+	} else {
+		startDelet1 := square[i].Object
+		endDelet1 := square[i].Object + square[i].TypeObj
+		newSquare1 = append(square[: startDelet1], square[endDelet1 : ]...)
+	}
+
+	square[i].Object = 0
+	square[i].Object2 = 0
+	square[i].TypeObj = 0
+	square[i].TypeObj2 = 0
+
+	return newSquare1
 }
 
 func createObj(square []inter.Square, obj string, step float64, x, z float64, k int) []inter.Square {
@@ -41,13 +80,14 @@ func createObj(square []inter.Square, obj string, step float64, x, z float64, k 
 			square = append(square, createStation(x, z, step)...)
 			square[k].TypeObj = inter.STATION
 		case "вагон":
-			square[k].TypeObj = inter.TRAIN
+			square[k].TypeObj2 = inter.TRAIN
 			square = append(square, createTrain(x, z, step)...)
 		case "головной вагон":
-			square[k].TypeObj = inter.TRAINHEAD
+			square[k].TypeObj2 = inter.TRAINHEAD
 			square = append(square, createTrainHead(x, z, step)...)
 		case "закругленные рельсы":
 			square = append(square, createCircleRails(x, z, step)...)
+			square[k].TypeObj = inter.RAILSCIRCLE
 		case "прямые рельсы":
 			square = append(square, createStraightRails(x, z, step)...)
 			square[k].TypeObj = inter.RAILS
@@ -97,7 +137,7 @@ func createTrainHead(x, z, step float64) []inter.Square {
 	slice[k] = createMirror(x + step / 5, 0.255, z + step / 4, x + step / 5 * 4, 0.53, z + step, color.NRGBA{245, 243, 240, 255})
 	k++
 
-	slice[k] = createMirror(x + step / 5 * 2, 0.336, z + step / 3, x + step / 5 * 3, 0.5, z + step / 5 * 4, color.Black)
+	slice[k] = createMirror(x + step / 5 * 2, 0.338, z + step / 3, x + step / 5 * 3, 0.52, z + step / 5 * 4, color.Black)
 	k++
 
 	slice[k] = createSquareBackFront(x + step / 5, 0.205, z + step, x + step / 5 * 4, 0.255, z + step, color.NRGBA{245, 243, 240, 255})
@@ -206,16 +246,25 @@ func createStation(x, z, step float64) []inter.Square {
 }
 
 func createCircleRails(x, z, step float64) []inter.Square {
-	slice := make([]inter.Square, 1)
+	slice := make([]inter.Square, 3)
 	railsColor := color.NRGBA{107, 106, 104, 255}
 	//sleepersColor := color.NRGBA{74, 56, 1, 255}
 
-	triagle1 := createTriangleBTB(x + step / 3, 0.201, z , x + step / 3 * 2, 0.201, z + step, railsColor)
-	triagle2 := createTriangleBTB(x, 0.201, z + step / 3, x + step, 0.201, z + step / 3 * 2, railsColor)
+	//triagle1 := createTriangleBTB(x + step / 3, 0.201, z, x + step / 3 * 1.65, 0.201, z + step / 3 * 1.65, railsColor)
+	//triagle2 := createTriangleBTB(x, 0.201, z, x + step, 0.201, z + step / 3 * 2, railsColor)
 
-	slice[0].Triagle1 = triagle1
-	slice[0].Triagle2 = triagle2
+	slice[0].Triagle1 = createTriangleBTB(x + step / 3, 0.203, z, x + step / 3 * 1.5, 0.203, z + step / 3, railsColor)
+	slice[0].Triagle2 = createTriangleBTB(x + step / 3 * 2, 0.203, z, x + step / 3 * 2.33, 0.203, z + step / 5, railsColor)
+
 	slice[0].Object = 102
+
+	slice[1].Triagle1 = createTriangleBTB(x + step / 3 * 1.5, 0.203, z + step / 3, x + step / 3 * 2, 0.203, z + step / 3 * 1.5, railsColor)
+	slice[1].Triagle2 = createTriangleBTB(x + step / 3 * 2.33, 0.203, z + step / 5, x + step / 3 * 2.66, 0.203, z + step / 4 * 1.1, railsColor)
+	slice[1].Object = 102
+
+	slice[2].Triagle1 = createTriangleBTB(x + step / 3 * 2, 0.203, z + step / 3 * 1.5, x + step, 0.203, z + step / 3 * 2, railsColor)
+	slice[2].Triagle2 = createTriangleBTB(x + step / 3 * 2.66, 0.203, z + step / 4 * 1.1, x + step, 0.203, z + step / 3, railsColor)
+	slice[2].Object = 102
 
 	return slice
 }

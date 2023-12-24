@@ -16,7 +16,7 @@ func NewMyGraphicsEngine(cnv ImageCanvas) *inter.MyGraphicsEngine {
 	engine.Cnv.Fill(color.RGBA{3, 215, 252, 140})
 	engine.ZBuf = CreateZBuf(engine.Cnv.Width(), engine.Cnv.Height())
 
-	engine.SBuf =  CreateZBuf(engine.Cnv.Width(), engine.Cnv.Height())
+	engine.SBuf = CreateZBuf(engine.Cnv.Width(), engine.Cnv.Height())
 
 	return engine
 }

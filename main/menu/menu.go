@@ -30,7 +30,6 @@ func MenuEx(w fyne.Window, a fyne.App, img *fyne.Container, engine *inter.MyGrap
 		entryB.SetPlaceHolder("от 1 до 100")
 	}
 
-
 	// Кнопки создания и отчистки сцены
 	var createSceneButton, clearButton *widget.Button
 	{
@@ -38,7 +37,7 @@ func MenuEx(w fyne.Window, a fyne.App, img *fyne.Container, engine *inter.MyGrap
 		sizeSceneA, sizeSceneB, errA, errB := CheckEntrySize(entryA.Text, entryB.Text)
 		if errA.message == "" && errB.message == "" {
 			engine.Object, engine.Step = polygon.CreateSceneEx(sizeSceneA, sizeSceneB)
-			engine.Camera.Matrix = camera.CreateCamera(engine.Camera, engine.ProjMatrix)
+			engine.Camera.Matrix, engine.PreobMatrix = camera.CreateCamera(engine.Camera, engine.ProjMatrix, 1)
 			drawobj.DrawSceneEx(engine)
 			img.Refresh()
 		} else {
@@ -52,8 +51,10 @@ func MenuEx(w fyne.Window, a fyne.App, img *fyne.Container, engine *inter.MyGrap
 
 		clearButton = widget.NewButton("Очистить", func() {
 			engine.ZBuf = nil
+			engine.SBuf = nil
 			engine.Cnv.Fill(color.RGBA{3, 215, 252, 140})
 			engine.ZBuf = graphics.CreateZBuf(engine.Cnv.Height(), engine.Cnv.Width())
+			engine.SBuf = graphics.CreateZBuf(engine.Cnv.Height(), engine.Cnv.Width())
 	
 			img.Refresh()
 		})
@@ -65,7 +66,7 @@ func MenuEx(w fyne.Window, a fyne.App, img *fyne.Container, engine *inter.MyGrap
 		labelTextCamera = widget.NewLabel("Управление камерой")
 		labelTextCamera.TextStyle = fyne.TextStyle{Bold: true, Italic: false}
 
-		spacerText = widget.NewLabel("")
+		//spacerText = widget.NewLabel("")
 
 		labelTextObj = widget.NewLabel("Выберите объект")
 		labelTextObj.TextStyle = fyne.TextStyle{Bold: true, Italic: false}
@@ -73,7 +74,8 @@ func MenuEx(w fyne.Window, a fyne.App, img *fyne.Container, engine *inter.MyGrap
 		labelTextRotate = widget.NewLabel("Действие")
 		labelTextRotate.TextStyle = fyne.TextStyle{Bold: true, Italic: false}
 	}
-	spacer := container.NewCenter(spacerText)
+	_ = spacerText
+	//spacer := container.NewCenter(spacerText)
 	text := container.NewCenter(labelTextCamera)
 
 	// Управление камерой через меню
@@ -199,7 +201,7 @@ func MenuEx(w fyne.Window, a fyne.App, img *fyne.Container, engine *inter.MyGrap
 			"повернуть"}, func(s string) {
 		})
 
-		radioButton = widget.NewButton("Создать", func() {
+		radioButton = widget.NewButton("Выполнить", func() {
 
 			numA, numB, errA, errB := CheckEntrySize(entryX.Text, entryY.Text)
 			if errA.message == "" && errB.message == ""{
@@ -223,8 +225,8 @@ func MenuEx(w fyne.Window, a fyne.App, img *fyne.Container, engine *inter.MyGrap
 
 	settingsObj := container.New(layout.NewHBoxLayout(), choiceObj, rotateObj)
 
-	// Смена тем(светлый, темный)
-	var btnDark, btnLight *widget.Button
+	// Смена тем(светлый, темный), убрать линии
+	var btnDark, btnLight, btnNoLine *widget.Button
 	{	
 		btnDark = widget.NewButton("Темная тема", func() {
 			a.Settings().SetTheme(theme.DarkTheme())
@@ -233,8 +235,16 @@ func MenuEx(w fyne.Window, a fyne.App, img *fyne.Container, engine *inter.MyGrap
 		btnLight = widget.NewButton("Светлая тема", func() {
 			a.Settings().SetTheme(theme.LightTheme())
 		})	
-	}
 
+		// btnNoLine = widget.NewButton("Убрать линии границ", func() {
+		// 	engine.NoLine = 1
+		// 	engine.Cnv.Fill(color.RGBA{3, 215, 252, 140})
+		// 	img.Refresh()
+		// 	drawobj.DrawSceneEx(engine)
+		// 	img.Refresh()
+		// })
+	}
+	_ = btnNoLine
 	menu := container.New(layout.NewVBoxLayout(), 
 		entryA, entryB, 
 		createSeparatorLine(1), createSceneButton, clearButton, 
@@ -244,8 +254,6 @@ func MenuEx(w fyne.Window, a fyne.App, img *fyne.Container, engine *inter.MyGrap
 		btnDark, btnLight)
 
 	menu = container.New(layout.NewHBoxLayout(), menu, createSeparatorLine(3))
-
-	fmt.Println(spacer)
 
 	return menu
 }
@@ -260,9 +268,11 @@ func createSeparatorLine(width float32) *canvas.Line {
 func renderScene(engine *inter.MyGraphicsEngine) {
 	engine.ZBuf = nil
 	engine.ZBuf = graphics.CreateZBuf(engine.Cnv.Width(), engine.Cnv.Height())
+	engine.SBuf = nil
+	engine.SBuf = graphics.CreateZBuf(engine.Cnv.Width(), engine.Cnv.Height())
 
 	engine.Cnv.Fill(color.RGBA{3, 215, 252, 140})
 
-	engine.Camera.Matrix = camera.CreateCamera(engine.Camera, engine.ProjMatrix)
+	engine.Camera.Matrix, engine.PreobMatrix = camera.CreateCamera(engine.Camera, engine.ProjMatrix, 1)
 	drawobj.DrawSceneEx(engine)
 }

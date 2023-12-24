@@ -1,0 +1,99 @@
+<mxfile host="app.diagrams.net" modified="2023-12-24T11:17:30.538Z" agent="Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.1 Safari/605.1.15" etag="IVolV_FejD1KdbKtRgDL" version="22.1.11" type="device">
+  <diagram name="Страница — 1" id="gRpHx_ixxY9DInlIZnKu">
+    <mxGraphModel dx="2901" dy="1187" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="1dQM5oHU1AY4M2uTU1lI-26" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;exitPerimeter=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;endArrow=none;endFill=0;strokeWidth=2;" edge="1" parent="1" source="1dQM5oHU1AY4M2uTU1lI-27" target="1dQM5oHU1AY4M2uTU1lI-29">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="1dQM5oHU1AY4M2uTU1lI-27" value="Начало" style="strokeWidth=2;html=1;shape=mxgraph.flowchart.terminator;whiteSpace=wrap;" vertex="1" parent="1">
+          <mxGeometry x="-106" y="72" width="160" height="70" as="geometry" />
+        </mxCell>
+        <mxCell id="1dQM5oHU1AY4M2uTU1lI-28" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;endArrow=none;endFill=0;strokeWidth=2;" edge="1" parent="1" source="1dQM5oHU1AY4M2uTU1lI-29" target="1dQM5oHU1AY4M2uTU1lI-31">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="1dQM5oHU1AY4M2uTU1lI-29" value="Всем элементам буфера кадра присвоить фоновое значение" style="rounded=0;whiteSpace=wrap;html=1;strokeWidth=2;" vertex="1" parent="1">
+          <mxGeometry x="-106" y="162" width="160" height="70" as="geometry" />
+        </mxCell>
+        <mxCell id="1dQM5oHU1AY4M2uTU1lI-30" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;strokeWidth=2;endArrow=none;endFill=0;" edge="1" parent="1" source="1dQM5oHU1AY4M2uTU1lI-31" target="1dQM5oHU1AY4M2uTU1lI-33">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="1dQM5oHU1AY4M2uTU1lI-31" value="Инициализировать z-буфер минимальным значением глубины" style="rounded=0;whiteSpace=wrap;html=1;strokeWidth=2;" vertex="1" parent="1">
+          <mxGeometry x="-106" y="252" width="160" height="70" as="geometry" />
+        </mxCell>
+        <mxCell id="1dQM5oHU1AY4M2uTU1lI-32" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;endArrow=none;endFill=0;strokeWidth=2;" edge="1" parent="1" source="1dQM5oHU1AY4M2uTU1lI-33" target="1dQM5oHU1AY4M2uTU1lI-36">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="1dQM5oHU1AY4M2uTU1lI-33" value="Для каждого полигона сцены" style="shape=loopLimit;whiteSpace=wrap;html=1;strokeWidth=2;" vertex="1" parent="1">
+          <mxGeometry x="-106" y="342" width="160" height="70" as="geometry" />
+        </mxCell>
+        <mxCell id="1dQM5oHU1AY4M2uTU1lI-34" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;endArrow=none;endFill=0;strokeWidth=2;" edge="1" parent="1" target="1dQM5oHU1AY4M2uTU1lI-39">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="-26" y="592" as="sourcePoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="1dQM5oHU1AY4M2uTU1lI-35" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;endArrow=none;endFill=0;strokeWidth=2;" edge="1" parent="1" source="1dQM5oHU1AY4M2uTU1lI-36" target="1dQM5oHU1AY4M2uTU1lI-52">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="1dQM5oHU1AY4M2uTU1lI-36" value="Для каждого пикселя текущего полигона" style="shape=loopLimit;whiteSpace=wrap;html=1;strokeWidth=2;" vertex="1" parent="1">
+          <mxGeometry x="-106" y="432" width="160" height="70" as="geometry" />
+        </mxCell>
+        <mxCell id="1dQM5oHU1AY4M2uTU1lI-37" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;endArrow=none;endFill=0;strokeWidth=2;" edge="1" parent="1" source="1dQM5oHU1AY4M2uTU1lI-39" target="1dQM5oHU1AY4M2uTU1lI-41">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="1dQM5oHU1AY4M2uTU1lI-38" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0;exitY=0.5;exitDx=0;exitDy=0;entryX=0.5;entryY=1;entryDx=0;entryDy=0;strokeWidth=2;" edge="1" parent="1" source="1dQM5oHU1AY4M2uTU1lI-39" target="1dQM5oHU1AY4M2uTU1lI-45">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="-126" y="652" />
+              <mxPoint x="-126" y="892" />
+              <mxPoint x="-26" y="892" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="1dQM5oHU1AY4M2uTU1lI-39" value="Z(x, y) &amp;gt; Z&lt;font style=&quot;font-size: 10px;&quot;&gt;buf&lt;/font&gt;(x, y)" style="rhombus;whiteSpace=wrap;html=1;strokeWidth=2;" vertex="1" parent="1">
+          <mxGeometry x="-106" y="612" width="160" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="1dQM5oHU1AY4M2uTU1lI-40" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;endArrow=none;endFill=0;strokeWidth=2;" edge="1" parent="1" source="1dQM5oHU1AY4M2uTU1lI-41" target="1dQM5oHU1AY4M2uTU1lI-43">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="1dQM5oHU1AY4M2uTU1lI-41" value="Z&lt;font style=&quot;border-color: var(--border-color); font-size: 10px;&quot;&gt;buf&lt;/font&gt;(x, y) = Z(x, y)" style="rounded=0;whiteSpace=wrap;html=1;strokeWidth=2;" vertex="1" parent="1">
+          <mxGeometry x="28" y="712" width="160" height="70" as="geometry" />
+        </mxCell>
+        <mxCell id="1dQM5oHU1AY4M2uTU1lI-42" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;strokeWidth=2;" edge="1" parent="1" source="1dQM5oHU1AY4M2uTU1lI-43" target="1dQM5oHU1AY4M2uTU1lI-45">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="1dQM5oHU1AY4M2uTU1lI-43" value="color(x, y) = pixelColor" style="rounded=0;whiteSpace=wrap;html=1;strokeWidth=2;" vertex="1" parent="1">
+          <mxGeometry x="28" y="802" width="160" height="70" as="geometry" />
+        </mxCell>
+        <mxCell id="1dQM5oHU1AY4M2uTU1lI-44" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=0;exitDx=0;exitDy=0;entryX=0.5;entryY=1;entryDx=0;entryDy=0;strokeWidth=2;endArrow=none;endFill=0;" edge="1" parent="1" source="1dQM5oHU1AY4M2uTU1lI-45" target="1dQM5oHU1AY4M2uTU1lI-47">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="1dQM5oHU1AY4M2uTU1lI-45" value="Для каждого пикселя текущего полигона" style="shape=loopLimit;whiteSpace=wrap;html=1;direction=west;strokeWidth=2;" vertex="1" parent="1">
+          <mxGeometry x="-106" y="912" width="160" height="70" as="geometry" />
+        </mxCell>
+        <mxCell id="1dQM5oHU1AY4M2uTU1lI-46" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=0;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;targetPerimeterSpacing=1;endArrow=none;endFill=0;strokeWidth=2;" edge="1" parent="1" source="1dQM5oHU1AY4M2uTU1lI-47" target="1dQM5oHU1AY4M2uTU1lI-48">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="1dQM5oHU1AY4M2uTU1lI-47" value="Для каждого пикселя текущего полигона" style="shape=loopLimit;whiteSpace=wrap;html=1;direction=west;strokeWidth=2;" vertex="1" parent="1">
+          <mxGeometry x="-106" y="1002" width="160" height="70" as="geometry" />
+        </mxCell>
+        <mxCell id="1dQM5oHU1AY4M2uTU1lI-48" value="Обновить текущее изображение" style="shape=process;whiteSpace=wrap;html=1;backgroundOutline=1;strokeWidth=2;" vertex="1" parent="1">
+          <mxGeometry x="-106" y="1092" width="160" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="1dQM5oHU1AY4M2uTU1lI-49" value="Конец" style="strokeWidth=2;html=1;shape=mxgraph.flowchart.terminator;whiteSpace=wrap;" vertex="1" parent="1">
+          <mxGeometry x="-106" y="1172" width="160" height="70" as="geometry" />
+        </mxCell>
+        <mxCell id="1dQM5oHU1AY4M2uTU1lI-50" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;entryPerimeter=0;endArrow=none;endFill=0;strokeWidth=2;" edge="1" parent="1" source="1dQM5oHU1AY4M2uTU1lI-48" target="1dQM5oHU1AY4M2uTU1lI-49">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="1dQM5oHU1AY4M2uTU1lI-51" value="Да" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;" vertex="1" parent="1">
+          <mxGeometry x="68" y="630" width="40" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="1dQM5oHU1AY4M2uTU1lI-52" value="Вычислить глубину пикселя Z(x, y)" style="rounded=0;whiteSpace=wrap;html=1;strokeWidth=2;" vertex="1" parent="1">
+          <mxGeometry x="-106" y="522" width="160" height="70" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
